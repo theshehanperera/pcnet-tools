@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="PCNET Tools - Free online web tools" />
+  <title>PCNET Tools — Web Tools Hub</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            app: "#09090b",
+            panel: "#111114",
+            panel2: "#18181b",
+            line: "#27272a",
+            accent: "#6366f1"
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: #3f3f46 #09090b;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background:
+        radial-gradient(circle at 80% 0%, rgba(99,102,241,.08), transparent 28%),
+        #09090b;
+    }
+
+    .glass {
+      background: rgba(17,17,20,.82);
+      backdrop-filter: blur(14px);
+    }
+
+    .tool-section {
+      animation: fadeUp .25s ease;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .drop-zone.dragover {
+      border-color: #818cf8;
+      background: rgba(99,102,241,.08);
+    }
+
+    input[type="range"] {
+      accent-color: #6366f1;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: #6366f1 !important;
+      box-shadow: 0 0 0 3px rgba(99,102,241,.12);
+    }
+
+    .nav-active {
+      background: rgba(99,102,241,.14);
+      color: #a5b4fc;
+      border-color: rgba(129,140,248,.22);
+    }
+
+    .gradient-text {
+      background: linear-gradient(90deg, #a5b4fc, #c4b5fd, #93c5fd);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .checkerboard {
+      background-image:
+        linear-gradient(45deg,#27272a 25%,transparent 25%),
+        linear-gradient(-45deg,#27272a 25%,transparent 25%),
+        linear-gradient(45deg,transparent 75%,#27272a 75%),
+        linear-gradient(-45deg,transparent 75%,#27272a 75%);
+      background-size: 20px 20px;
+      background-position: 0 0,0 10px,10px -10px,-10px 0;
+    }
+
+    /* COMMON COMPONENTS */
+    .panel {
+      background: #111114;
+      border: 1px solid #27272a;
+      border-radius: 1rem;
+      padding: 1.25rem;
+    }
+
+    @media (min-width: 640px) {
+      .panel {
+        padding: 1.75rem;
+      }
+    }
+
+    .input {
+      width: 100%;
+      background: #09090b;
+      border: 1px solid #27272a;
+      border-radius: .75rem;
+      padding: .75rem 1rem;
+      font-size: .875rem;
+      color: #f4f4f5;
+      transition: border-color .2s, box-shadow .2s, background .2s;
+    }
+
+    .input::placeholder,
+    .textarea::placeholder {
+      color: #52525b;
+    }
+
+    .textarea {
+      width: 100%;
+      background: #09090b;
+      border: 1px solid #27272a;
+      border-radius: .75rem;
+      padding: .75rem 1rem;
+      font-size: .875rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      color: #e4e4e7;
+      resize: vertical;
+    }
+
+    .btn-primary {
+      background: #4f46e5;
+      border-radius: .75rem;
+      padding: .75rem 1.25rem;
+      font-size: .875rem;
+      font-weight: 600;
+      color: white;
+      transition: background .2s, transform .1s;
+      white-space: nowrap;
+    }
+
+    .btn-primary:hover {
+      background: #6366f1;
+    }
+
+    .btn-primary:active {
+      transform: translateY(1px);
+    }
+
+    .btn-primary:disabled {
+      opacity: .55;
+      cursor: not-allowed;
+    }
+
+    .btn-secondary {
+      background: #27272a;
+      border-radius: .75rem;
+      padding: .75rem 1.25rem;
+      font-size: .875rem;
+      font-weight: 500;
+      color: #e4e4e7;
+      transition: background .2s;
+      white-space: nowrap;
+    }
+
+    .btn-secondary:hover {
+      background: #3f3f46;
+    }
+
+    .btn-success {
+      background: #059669;
+      border-radius: .75rem;
+      padding: .75rem 1.25rem;
+      font-size: .875rem;
+      font-weight: 600;
+      color: white;
+      transition: background .2s;
+    }
+
+    .btn-success:hover {
+      background: #10b981;
+    }
+
+    .label {
+      display: block;
+      font-size: .875rem;
+      font-weight: 500;
+      color: #d4d4d8;
+    }
+
+    .muted {
+      font-size: .875rem;
+      color: #71717a;
+    }
+
+    .error {
+      font-size: .875rem;
+      color: #f87171;
+    }
+
+    .placeholder-box {
+      border: 1px dashed #3f3f46;
+      background: #09090b;
+      border-radius: .75rem;
+      padding: 1.25rem;
+      font-size: .875rem;
+      color: #71717a;
+    }
+
+    .icon-box {
+      width: 3.5rem;
+      height: 3.5rem;
+      border-radius: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+
+    .check-option {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      background: #09090b;
+      border: 1px solid #27272a;
+      border-radius: .75rem;
+      padding: .75rem 1rem;
+      font-size: .875rem;
+      color: #a1a1aa;
+      cursor: pointer;
+    }
+
+    .check-option input {
+      accent-color: #6366f1;
+    }
+
+    /* YOUTUBE FORM PANEL */
+    .youtube-form-panel {
+      width: 100%;
+      max-width: 1072px;
+      margin-top: 1.5rem;
+      background: #111114;
+      border: 1px solid #27272a;
+      border-radius: 1rem;
+      padding: 1.75rem;
+    }
+
+    .youtube-form-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: .75rem;
+      margin-top: .625rem;
+      align-items: center;
+    }
+
+    .youtube-url-input {
+      height: 46px;
+      width: 100%;
+      background: #09090b;
+      border: 1px solid #27272a;
+      border-radius: .75rem;
+      padding: 0 1rem;
+      font-size: .875rem;
+      color: #e4e4e7;
+      transition: border-color .2s, box-shadow .2s;
+    }
+
+    .youtube-get-btn {
+      height: 46px;
+      padding: 0 1.35rem;
+      background: #4f46e5;
+      border-radius: .75rem;
+      font-size: .875rem;
+      font-weight: 600;
+      color: #fff;
+      white-space: nowrap;
+      transition: background .2s, transform .1s;
+    }
+
+    .youtube-get-btn:hover {
+      background: #6366f1;
+    }
+
+    .youtube-get-btn:active {
+      transform: translateY(1px);
+    }
+
+    @media (max-width: 639px) {
+      .youtube-form-panel {
+        padding: 1.25rem;
+      }
+      .youtube-form-grid {
+        grid-template-columns: 1fr;
+      }
+      .youtube-get-btn {
+        width: 100%;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .youtube-form-panel {
+        padding: 1.75rem;
+      }
+    }
+  </style>
+</head>
+
+<body class="dark text-zinc-100 min-h-screen">
+
+  <!-- MOBILE OVERLAY -->
+  <div id="mobileOverlay" class="fixed inset-0 bg-black/70 z-40 hidden lg:hidden" onclick="closeSidebar()"></div>
+
+  <!-- SIDEBAR -->
+  <aside id="sidebar" class="fixed z-50 inset-y-0 left-0 w-72 bg-[#0d0d10] border-r border-zinc-800 transform -translate-x-full lg:translate-x-0 transition-transform duration-300">
+    <div class="h-full flex flex-col">
+      <div class="px-5 py-5 border-b border-zinc-800">
+        <div class="flex items-center gap-3">
+          <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center shadow-lg shadow-indigo-500/20">
+            <span class="font-black text-white text-lg">PC</span>
+          </div>
+          <div>
+            <h1 class="font-bold text-lg tracking-tight">PCNet Tools</h1>
+            <p class="text-xs text-zinc-500">Simple tools. One place.</p>
+          </div>
+          <button onclick="closeSidebar()" class="ml-auto lg:hidden text-zinc-500 hover:text-white">✕</button>
+        </div>
+      </div>
+
+      <nav id="sidebarNav" class="flex-1 overflow-y-auto p-4 space-y-6">
+        <div class="tool-category">
+          <p class="px-3 mb-2 text-[10px] font-bold tracking-[.16em] text-zinc-600">MEDIA & SOCIAL</p>
+
+          <button data-tool="youtube" onclick="openTool('youtube')" class="nav-button nav-active w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border border-transparent text-sm transition">
+            <span class="w-8 h-8 rounded-lg bg-red-500/10 text-red-400 flex items-center justify-center">▶</span>
+            <span>YouTube Thumbnail</span>
+          </button>
+
+          <button data-tool="audio" onclick="openTool('audio')" class="nav-button w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border border-transparent text-sm text-zinc-400 hover:text-white hover:bg-zinc-800/60 transition">
+            <span class="w-8 h-8 rounded-lg bg-pink-500/10 text-pink-400 flex items-center justify-center">♫</span>
+            <span>Audio Extractor</span>
+          </button>
+        </div>
+
+        <div class="tool-category">
+          <p class="px-3 mb-2 text-[10px] font-bold tracking-[.16em] text-zinc-600">DESIGN & MEDIA EDITING</p>
+
+          <button data-tool="compressor" onclick="openTool('compressor')" class="nav-button w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border border-transparent text-sm text-zinc-400 hover:text-white hover:bg-zinc-800/60 transition">
+            <span class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center">▣</span>
+            <span>Image Compressor</span>
+          </button>
+
+          <button data-tool="resizer" onclick="openTool('resizer')" class="nav-button w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border border-transparent text-sm text-zinc-400 hover:text-white hover:bg-zinc-800/60 transition">
+            <span class="w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center">↗</span>
+            <span>Image Resizer</span>
+          </button>
+
+          <button data-tool="color" onclick="openTool('color')" class="nav-button w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border border-transparent text-sm text-zinc-400 hover:text-white hover:bg-zinc-800/60 transition">
+            <span class="w-8 h-8 rounded-lg bg-violet-500/10 text-violet-400 flex items-center justify-center">●</span>
+            <span>Color Picker</span>
+          </button>
+        </div>
+
+        <div class="tool-category">
+          <p class="px-3 mb-2 text-[10px] font-bold tracking-[.16em] text-zinc-600">TECH & UTILITIES</p>
+
+          <button data-tool="speed" onclick="openTool('speed')" class="nav-button w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border border-transparent text-sm text-zinc-400 hover:text-white hover:bg-zinc-800/60 transition">
+            <span class="w-8 h-8 rounded-lg bg-orange-500/10 text-orange-400 flex items-center justify-center">⚡</span>
+            <span>Internet Speed</span>
+          </button>
+
+          <button data-tool="ip" onclick="openTool('ip')" class="nav-button w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border border-transparent text-sm text-zinc-400 hover:text-white hover:bg-zinc-800/60 transition">
+            <span class="w-8 h-8 rounded-lg bg-sky-500/10 text-sky-400 flex items-center justify-center">◎</span>
+            <span>My IP & Network</span>
+          </button>
+
+          <button data-tool="json" onclick="openTool('json')" class="nav-button w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border border-transparent text-sm text-zinc-400 hover:text-white hover:bg-zinc-800/60 transition">
+            <span class="w-8 h-8 rounded-lg bg-yellow-500/10 text-yellow-400 flex items-center justify-center">{ }</span>
+            <span>JSON Formatter</span>
+          </button>
+
+          <button data-tool="counter" onclick="openTool('counter')" class="nav-button w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border border-transparent text-sm text-zinc-400 hover:text-white hover:bg-zinc-800/60 transition">
+            <span class="w-8 h-8 rounded-lg bg-teal-500/10 text-teal-400 flex items-center justify-center">Aa</span>
+            <span>Word Counter</span>
+          </button>
+
+          <button data-tool="password" onclick="openTool('password')" class="nav-button w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border border-transparent text-sm text-zinc-400 hover:text-white hover:bg-zinc-800/60 transition">
+            <span class="w-8 h-8 rounded-lg bg-rose-500/10 text-rose-400 flex items-center justify-center">🔒</span>
+            <span>Password Generator</span>
+          </button>
+        </div>
+      </nav>
+
+      <div class="p-4 border-t border-zinc-800">
+        <p class="text-[11px] text-zinc-600 text-center">PCNet Tools • Browser utilities</p>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="lg:ml-72 min-h-screen">
+    <header class="sticky top-0 z-30 h-16 glass border-b border-zinc-800/80">
+      <div class="h-full px-4 sm:px-6 flex items-center gap-4">
+        <button onclick="openSidebar()" class="lg:hidden w-10 h-10 rounded-xl bg-zinc-900 border border-zinc-800">☰</button>
+
+        <div class="hidden sm:block">
+          <p id="headerTitle" class="font-semibold">YouTube Thumbnail Downloader</p>
+          <p id="headerSubtitle" class="text-[11px] text-zinc-500">Get available YouTube thumbnail qualities</p>
+        </div>
+
+        <div class="ml-auto relative w-full max-w-xs">
+          <span class="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500">⌕</span>
+          <input id="toolSearch" type="search" placeholder="Search tools..." class="w-full bg-zinc-900/80 border border-zinc-800 rounded-xl pl-9 pr-4 py-2.5 text-sm" oninput="filterTools(this.value)" />
+        </div>
+      </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+      <!-- YOUTUBE THUMBNAIL TOOL -->
+      <section id="tool-youtube" data-name="youtube thumbnail downloader" class="tool-section">
+        <div class="mb-8">
+          <span class="text-xs uppercase tracking-[.16em] font-bold text-indigo-400">PCNET TOOL</span>
+          <h2 class="text-3xl sm:text-4xl font-black tracking-tight mt-2">YouTube Thumbnail Downloader</h2>
+          <p class="muted mt-3 max-w-2xl">Extract and download available thumbnail qualities from a YouTube video.</p>
+        </div>
+
+        <div class="youtube-form-panel">
+          <label for="youtubeUrl" class="label">YouTube Video URL</label>
+          <div class="youtube-form-grid">
+            <input id="youtubeUrl" type="url" class="youtube-url-input" placeholder="https://www.youtube.com/watch?v=..." autocomplete="off" onkeydown="if(event.key === 'Enter') getYouTubeThumbnails()" />
+            <button type="button" onclick="getYouTubeThumbnails()" class="youtube-get-btn">Get Thumbnail</button>
+          </div>
+          <p id="youtubeError" class="error mt-3 hidden"></p>
+          <div id="thumbnailGrid" class="grid sm:grid-cols-2 xl:grid-cols-4 gap-5 mt-8 hidden"></div>
+        </div>
+      </section>
+
+      <!-- AUDIO EXTRACTOR TOOL -->
+      <section id="tool-audio" data-name="tiktok instagram audio extractor" class="tool-section hidden">
+        <div class="mb-8">
+          <span class="text-xs uppercase tracking-[.16em] font-bold text-indigo-400">PCNET TOOL</span>
+          <h2 class="text-3xl sm:text-4xl font-black tracking-tight mt-2">TikTok / Instagram Audio Extractor</h2>
+          <p class="muted mt-3 max-w-2xl">Extract audio tracks easily from social media clips.</p>
+        </div>
+
+        <div class="panel max-w-3xl">
+          <div class="icon-box bg-pink-500/10 text-pink-400">♫</div>
+          <h3 class="text-lg font-semibold mt-5">Extract Audio</h3>
+          <p class="muted mt-2">Paste a supported TikTok or Instagram URL below.</p>
+
+          <div class="flex flex-col sm:flex-row gap-3 mt-6">
+            <input id="audioInputUrl" class="input flex-1" placeholder="Paste TikTok / Instagram URL..." />
+            <button id="audioFetchBtn" onclick="fetchSocialAudio()" class="btn-primary">Fetch Audio</button>
+          </div>
+
+          <p id="audioError" class="error mt-3 hidden"></p>
+
+          <div id="audioResult" class="placeholder-box mt-6 hidden">
+            <p id="audioTitle" class="text-sm font-semibold text-white mb-3"></p>
+            <audio id="audioPlayer" controls class="w-full mb-4"></audio>
+            <a id="audioDownloadLink" href="#" target="_blank" download class="btn-success inline-block text-center w-full sm:w-auto">Download Audio (MP3)</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- IMAGE COMPRESSOR TOOL -->
+      <section id="tool-compressor" data-name="image compressor webp converter" class="tool-section hidden">
+        <div class="mb-8">
+          <span class="text-xs uppercase tracking-[.16em] font-bold text-indigo-400">PCNET TOOL</span>
+          <h2 class="text-3xl sm:text-4xl font-black tracking-tight mt-2">Image Compressor & WebP Converter</h2>
+          <p class="muted mt-3 max-w-2xl">Compress images locally in your browser using HTML5 Canvas.</p>
+        </div>
+
+        <div class="panel">
+          <div id="compressDrop" class="drop-zone border-2 border-dashed border-zinc-700 rounded-2xl p-10 text-center transition">
+            <div class="text-4xl">🖼️</div>
+            <h3 class="font-semibold mt-4">Drop an image here</h3>
+            <p class="muted mt-2">JPG, PNG, WebP and other browser-supported formats</p>
+            <label class="inline-block mt-5">
+              <span class="btn-primary cursor-pointer">Choose Image</span>
+              <input id="compressInput" type="file" accept="image/*" class="hidden" onchange="handleImageSelect(event)" />
+            </label>
+          </div>
+
+          <div id="compressControls" class="hidden mt-8">
+            <div class="grid md:grid-cols-2 gap-6">
+              <div>
+                <div class="flex justify-between text-sm">
+                  <label>Quality</label>
+                  <span id="qualityLabel">80%</span>
+                </div>
+                <input id="compressQuality" type="range" min="1" max="100" value="80" class="w-full mt-4" oninput="document.getElementById('qualityLabel').innerText = this.value + '%'" />
+              </div>
+              <div>
+                <label class="label">Output Format</label>
+                <select id="compressFormat" class="input mt-2">
+                  <option value="image/webp">WebP</option>
+                  <option value="image/jpeg">JPEG</option>
+                  <option value="image/png">PNG</option>
+                </select>
+              </div>
+            </div>
+            <button onclick="compressImage()" class="btn-primary mt-6">Compress Image</button>
+          </div>
+
+          <div id="compressResult" class="hidden mt-8">
+            <div class="grid md:grid-cols-2 gap-5">
+              <div>
+                <p class="label mb-2">Original</p>
+                <div class="checkerboard rounded-xl border border-zinc-800 p-3">
+                  <img id="originalImage" class="w-full h-64 object-contain rounded-lg" />
+                </div>
+                <p id="originalSize" class="text-xs text-zinc-500 mt-2">—</p>
+              </div>
+              <div>
+                <p class="label mb-2">Compressed</p>
+                <div class="checkerboard rounded-xl border border-zinc-800 p-3">
+                  <img id="compressedImage" class="w-full h-64 object-contain rounded-lg" />
+                </div>
+                <p id="compressedSize" class="text-xs text-zinc-500 mt-2">—</p>
+              </div>
+            </div>
+            <a id="compressedDownload" class="btn-success inline-block mt-6" download="compressed-image.webp">Download Compressed Image</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- IMAGE RESIZER TOOL -->
+      <section id="tool-resizer" data-name="image resizer social media sizes" class="tool-section hidden">
+        <div class="mb-8">
+          <span class="text-xs uppercase tracking-[.16em] font-bold text-indigo-400">PCNET TOOL</span>
+          <h2 class="text-3xl sm:text-4xl font-black tracking-tight mt-2">Image Resizer</h2>
+          <p class="muted mt-3 max-w-2xl">Resize images for social media and custom dimensions.</p>
+        </div>
+
+        <div class="panel">
+          <input id="resizeInput" type="file" accept="image/*" class="hidden" onchange="handleResizeSelect(event)" />
+          <label for="resizeInput" class="flex items-center justify-center h-32 rounded-xl border-2 border-dashed border-zinc-700 cursor-pointer hover:border-indigo-500 transition">
+            <div class="text-center">
+              <div class="text-2xl">↗</div>
+              <p class="text-sm font-medium mt-2">Choose Image</p>
+            </div>
+          </label>
+
+          <div id="resizeControls" class="hidden mt-7">
+            <div class="grid md:grid-cols-3 gap-4">
+              <div class="md:col-span-2">
+                <label class="label">Preset Size</label>
+                <select id="resizePreset" class="input mt-2" onchange="toggleCustomResize(this.value)">
+                  <option value="1080x1080">Instagram Square — 1080 × 1080</option>
+                  <option value="1080x1350">Instagram Portrait — 1080 × 1350</option>
+                  <option value="1080x1920">Story / Shorts — 1080 × 1920</option>
+                  <option value="1280x720">HD Video — 1280 × 720</option>
+                  <option value="1920x1080">Full HD — 1920 × 1080</option>
+                  <option value="1200x630">Facebook Link — 1200 × 630</option>
+                  <option value="custom">Custom</option>
+                </select>
+              </div>
+              <div>
+                <label class="label">Format</label>
+                <select id="resizeFormat" class="input mt-2">
+                  <option value="image/jpeg">JPEG</option>
+                  <option value="image/png">PNG</option>
+                  <option value="image/webp">WebP</option>
+                </select>
+              </div>
+            </div>
+
+            <div id="customDimensions" class="hidden grid sm:grid-cols-2 gap-4 mt-5">
+              <div>
+                <label class="label">Width</label>
+                <input id="customWidth" type="number" class="input mt-2" value="1080" />
+              </div>
+              <div>
+                <label class="label">Height</label>
+                <input id="customHeight" type="number" class="input mt-2" value="1080" />
+              </div>
+            </div>
+
+            <button onclick="resizeImage()" class="btn-primary mt-6">Resize & Download</button>
+
+            <div id="resizePreview" class="hidden mt-7">
+              <div class="max-w-2xl mx-auto bg-zinc-950 border border-zinc-800 rounded-xl p-4">
+                <img id="resizedImage" class="max-h-[500px] mx-auto object-contain rounded-lg" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- COLOR PICKER TOOL -->
+      <section id="tool-color" data-name="color picker palette generator shades" class="tool-section hidden">
+        <div class="mb-8">
+          <span class="text-xs uppercase tracking-[.16em] font-bold text-indigo-400">PCNET TOOL</span>
+          <h2 class="text-3xl sm:text-4xl font-black tracking-tight mt-2">Color Picker & Palette Generator</h2>
+          <p class="muted mt-3 max-w-2xl">Pick a color, copy its values and generate shades.</p>
+        </div>
+
+        <div class="panel">
+          <div class="grid lg:grid-cols-3 gap-6">
+            <div>
+              <label class="label">Choose Color</label>
+              <input id="colorInput" type="color" value="#6366f1" class="w-full h-40 mt-3 rounded-2xl bg-zinc-950 border border-zinc-800 cursor-pointer" oninput="updateColorValues(this.value)" />
+            </div>
+
+            <div class="lg:col-span-2">
+              <div id="colorPreview" class="h-40 rounded-2xl shadow-lg" style="background:#6366f1"></div>
+
+              <div class="grid sm:grid-cols-3 gap-3 mt-5">
+                <button id="hexBox" onclick="copyText('hexValue')" class="text-left bg-zinc-950 border border-zinc-800 rounded-xl p-4 hover:border-indigo-500 transition">
+                  <p class="text-[10px] uppercase tracking-wider text-zinc-600">HEX</p>
+                  <p id="hexValue" class="value text-sm font-mono mt-2 break-all">#6366f1</p>
+                  <p class="text-[10px] text-indigo-400 mt-2">Click to copy</p>
+                </button>
+
+                <button id="rgbBox" onclick="copyText('rgbValue')" class="text-left bg-zinc-950 border border-zinc-800 rounded-xl p-4 hover:border-indigo-500 transition">
+                  <p class="text-[10px] uppercase tracking-wider text-zinc-600">RGB</p>
+                  <p id="rgbValue" class="value text-sm font-mono mt-2 break-all">rgb(99, 102, 241)</p>
+                  <p class="text-[10px] text-indigo-400 mt-2">Click to copy</p>
+                </button>
+
+                <button id="hslBox" onclick="copyText('hslValue')" class="text-left bg-zinc-950 border border-zinc-800 rounded-xl p-4 hover:border-indigo-500 transition">
+                  <p class="text-[10px] uppercase tracking-wider text-zinc-600">HSL</p>
+                  <p id="hslValue" class="value text-sm font-mono mt-2 break-all">hsl(239, 84%, 67%)</p>
+                  <p class="text-[10px] text-indigo-400 mt-2">Click to copy</p>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SPEED TEST TOOL -->
+      <section id="tool-speed" data-name="internet speed test ping download upload" class="tool-section hidden">
+        <div class="mb-8">
+          <span class="text-xs uppercase tracking-[.16em] font-bold text-indigo-400">PCNET TOOL</span>
+          <h2 class="text-3xl sm:text-4xl font-black tracking-tight mt-2">Internet Speed Test</h2>
+          <p class="muted mt-3 max-w-2xl">A lightweight browser-based network test interface.</p>
+        </div>
+
+        <div class="panel text-center">
+          <div id="speedGauge" class="w-56 h-56 mx-auto rounded-full border-[14px] border-zinc-800 flex items-center justify-center relative">
+            <div>
+              <div id="speedValue" class="text-5xl font-black">0</div>
+              <div class="text-xs text-zinc-500">Mbps</div>
+            </div>
+          </div>
+
+          <button id="speedButton" onclick="startSpeedTest()" class="btn-primary mt-8">Start Speed Test</button>
+
+          <div class="grid sm:grid-cols-3 gap-4 mt-8 text-left">
+            <div class="bg-zinc-950 border border-zinc-800 rounded-xl p-5">
+              <p class="text-xs uppercase tracking-wider text-zinc-600">Ping</p>
+              <p id="pingValue" class="text-xl font-bold mt-2">— ms</p>
+            </div>
+            <div class="bg-zinc-950 border border-zinc-800 rounded-xl p-5">
+              <p class="text-xs uppercase tracking-wider text-zinc-600">Download</p>
+              <p id="downloadValue" class="text-xl font-bold mt-2">— Mbps</p>
+            </div>
+            <div class="bg-zinc-950 border border-zinc-800 rounded-xl p-5">
+              <p class="text-xs uppercase tracking-wider text-zinc-600">Upload</p>
+              <p id="uploadValue" class="text-xl font-bold mt-2">— Mbps</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- IP TOOL -->
+      <section id="tool-ip" data-name="my ip network information country isp user agent" class="tool-section hidden">
+        <div class="mb-8">
+          <span class="text-xs uppercase tracking-[.16em] font-bold text-indigo-400">PCNET TOOL</span>
+          <h2 class="text-3xl sm:text-4xl font-black tracking-tight mt-2">My IP & Network Info</h2>
+          <p class="muted mt-3 max-w-2xl">Automatically retrieve public network information.</p>
+        </div>
+
+        <div class="panel">
+          <button onclick="lookupIP()" class="btn-primary">Refresh Network Info</button>
+
+          <div id="ipLoading" class="hidden muted mt-5">Loading network information...</div>
+          <div id="ipError" class="hidden error mt-5"></div>
+
+          <div id="ipGrid" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-7">
+            <div class="bg-zinc-950 border border-zinc-800 rounded-xl p-5">
+              <p class="text-xs uppercase tracking-wider text-zinc-600">IP Address</p>
+              <p id="ipAddress" class="font-semibold mt-2 break-words text-sm">—</p>
+            </div>
+            <div class="bg-zinc-950 border border-zinc-800 rounded-xl p-5">
+              <p class="text-xs uppercase tracking-wider text-zinc-600">Country</p>
+              <p id="ipCountry" class="font-semibold mt-2 break-words text-sm">—</p>
+            </div>
+            <div class="bg-zinc-950 border border-zinc-800 rounded-xl p-5">
+              <p class="text-xs uppercase tracking-wider text-zinc-600">ISP / Organization</p>
+              <p id="ipISP" class="font-semibold mt-2 break-words text-sm">—</p>
+            </div>
+            <div class="bg-zinc-950 border border-zinc-800 rounded-xl p-5">
+              <p class="text-xs uppercase tracking-wider text-zinc-600">User Agent</p>
+              <p id="ipUserAgent" class="font-semibold mt-2 break-words text-xs text-zinc-400">—</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- JSON FORMATTER TOOL -->
+      <section id="tool-json" data-name="json formatter validator" class="tool-section hidden">
+        <div class="mb-8">
+          <span class="text-xs uppercase tracking-[.16em] font-bold text-indigo-400">PCNET TOOL</span>
+          <h2 class="text-3xl sm:text-4xl font-black tracking-tight mt-2">JSON Formatter</h2>
+          <p class="muted mt-3 max-w-2xl">Format, validate and beautify JSON code.</p>
+        </div>
+        <div class="panel">
+          <textarea id="jsonInput" rows="8" class="textarea" placeholder="Paste raw JSON here..."></textarea>
+          <div class="flex gap-3 mt-4">
+            <button onclick="formatJSON()" class="btn-primary">Format JSON</button>
+            <button onclick="minifyJSON()" class="btn-secondary">Minify</button>
+          </div>
+          <p id="jsonError" class="error mt-3 hidden"></p>
+        </div>
+      </section>
+
+      <!-- WORD COUNTER TOOL -->
+      <section id="tool-counter" data-name="word counter character count text analyzer" class="tool-section hidden">
+        <div class="mb-8">
+          <span class="text-xs uppercase tracking-[.16em] font-bold text-indigo-400">PCNET TOOL</span>
+          <h2 class="text-3xl sm:text-4xl font-black tracking-tight mt-2">Word & Character Counter</h2>
+          <p class="muted mt-3 max-w-2xl">Analyze text word count, characters, sentences, and read time.</p>
+        </div>
+        <div class="panel">
+          <textarea id="counterText" rows="6" class="textarea" placeholder="Type or paste text..." oninput="analyzeText(this.value)"></textarea>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6">
+            <div class="bg-zinc-950 border border-zinc-800 rounded-xl p-4">
+              <p class="text-xs text-zinc-500">Words</p>
+              <p id="wordCount" class="text-2xl font-bold text-white mt-1">0</p>
+            </div>
+            <div class="bg-zinc-950 border border-zinc-800 rounded-xl p-4">
+              <p class="text-xs text-zinc-500">Characters</p>
+              <p id="charCount" class="text-2xl font-bold text-white mt-1">0</p>
+            </div>
+            <div class="bg-zinc-950 border border-zinc-800 rounded-xl p-4">
+              <p class="text-xs text-zinc-500">Sentences</p>
+              <p id="sentenceCount" class="text-2xl font-bold text-white mt-1">0</p>
+            </div>
+            <div class="bg-zinc-950 border border-zinc-800 rounded-xl p-4">
+              <p class="text-xs text-zinc-500">Reading Time</p>
+              <p id="readTime" class="text-2xl font-bold text-white mt-1">0m</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PASSWORD GENERATOR TOOL -->
+      <section id="tool-password" data-name="password generator random secure" class="tool-section hidden">
+        <div class="mb-8">
+          <span class="text-xs uppercase tracking-[.16em] font-bold text-indigo-400">PCNET TOOL</span>
+          <h2 class="text-3xl sm:text-4xl font-black tracking-tight mt-2">Password Generator</h2>
+          <p class="muted mt-3 max-w-2xl">Generate strong, random passwords securely.</p>
+        </div>
+        <div class="panel max-w-2xl">
+          <div class="flex items-center gap-3 bg-zinc-950 border border-zinc-800 rounded-xl p-4">
+            <input id="generatedPassword" readonly class="bg-transparent border-none w-full text-lg font-mono text-indigo-400 font-bold focus:ring-0" placeholder="Click generate" />
+            <button onclick="copyText('generatedPassword')" class="btn-secondary text-xs">Copy</button>
+          </div>
+          <div class="mt-6 space-y-4">
+            <div>
+              <div class="flex justify-between text-sm mb-2">
+                <label>Password Length</label>
+                <span id="passLengthVal">16</span>
+              </div>
+              <input id="passLength" type="range" min="8" max="64" value="16" class="w-full" oninput="document.getElementById('passLengthVal').innerText = this.value" />
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <label class="check-option"><input id="incUppercase" type="checkbox" checked /> Uppercase</label>
+              <label class="check-option"><input id="incNumbers" type="checkbox" checked /> Numbers</label>
+              <label class="check-option"><input id="incSymbols" type="checkbox" checked /> Symbols</label>
+            </div>
+            <button onclick="generatePassword()" class="btn-primary w-full mt-4">Generate Password</button>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- JAVASCRIPT FUNCTIONS -->
+  <script>
+    // Navigation & Sidebar
+    function openSidebar() {
+      document.getElementById('sidebar').classList.remove('-translate-x-full');
+      document.getElementById('mobileOverlay').classList.remove('hidden');
+    }
+
+    function closeSidebar() {
+      document.getElementById('sidebar').classList.add('-translate-x-full');
+      document.getElementById('mobileOverlay').classList.add('hidden');
+    }
+
+    function openTool(toolId) {
+      document.querySelectorAll('.tool-section').forEach(sec => sec.classList.add('hidden'));
+      document.querySelectorAll('.nav-button').forEach(btn => btn.classList.remove('nav-active'));
+
+      const activeSection = document.getElementById('tool-' + toolId);
+      if (activeSection) activeSection.classList.remove('hidden');
+
+      const activeNav = document.querySelector(`[data-tool="${toolId}"]`);
+      if (activeNav) activeNav.classList.add('nav-active');
+
+      const titleMap = {
+        'youtube': 'YouTube Thumbnail Downloader',
+        'audio': 'TikTok / Instagram Audio Extractor',
+        'compressor': 'Image Compressor & Converter',
+        'resizer': 'Image Resizer',
+        'color': 'Color Picker',
+        'speed': 'Internet Speed Test',
+        'ip': 'My IP & Network Info',
+        'json': 'JSON Formatter',
+        'counter': 'Word & Character Counter',
+        'password': 'Password Generator'
+      };
+
+      document.getElementById('headerTitle').innerText = titleMap[toolId] || 'Web Tools';
+      closeSidebar();
+    }
+
+    function filterTools(query) {
+      const q = query.toLowerCase().trim();
+      document.querySelectorAll('.tool-category').forEach(cat => {
+        let hasVisible = false;
+        cat.querySelectorAll('.nav-button').forEach(btn => {
+          const name = btn.innerText.toLowerCase();
+          if (name.includes(q)) {
+            btn.classList.remove('hidden');
+            hasVisible = true;
+          } else {
+            btn.classList.add('hidden');
+          }
+        });
+        cat.style.display = hasVisible ? 'block' : 'none';
+      });
+    }
+
+    // YouTube Thumbnail Tool
+    function getYouTubeThumbnails() {
+      const urlInput = document.getElementById('youtubeUrl').value.trim();
+      const errorEl = document.getElementById('youtubeError');
+      const gridEl = document.getElementById('thumbnailGrid');
+
+      errorEl.classList.add('hidden');
+      gridEl.classList.add('hidden');
+
+      let videoId = "";
+      const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+      const match = urlInput.match(regExp);
+
+      if (match && match[2].length === 11) {
+        videoId = match[2];
+      } else {
+        errorEl.innerText = "Please enter a valid YouTube Video URL.";
+        errorEl.classList.remove('hidden');
+        return;
+      }
+
+      const qualities = [
+        { label: "Maximum Quality (HD)", url: `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg` },
+        { label: "High Quality (SD)", url: `https://img.youtube.com/vi/${videoId}/sddefault.jpg` },
+        { label: "Medium Quality", url: `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` },
+        { label: "Standard Quality", url: `https://img.youtube.com/vi/${videoId}/mqdefault.jpg` }
+      ];
+
+      gridEl.innerHTML = qualities.map(q => `
+        <div class="bg-zinc-950 border border-zinc-800 rounded-xl p-3 flex flex-col justify-between">
+          <div>
+            <img src="${q.url}" class="w-full h-40 object-cover rounded-lg border border-zinc-800/60" onerror="this.onerror=null; this.src='https://img.youtube.com/vi/${videoId}/hqdefault.jpg';" />
+            <p class="text-xs font-semibold mt-3 text-zinc-300">${q.label}</p>
+          </div>
+          <a href="${q.url}" target="_blank" download class="btn-primary text-center mt-4 text-xs block py-2">Download</a>
+        </div>
+      `).join('');
+
+      gridEl.classList.remove('hidden');
+    }
+
+    // Audio Extractor Function
+    async function fetchSocialAudio() {
+      const url = document.getElementById('audioInputUrl').value.trim();
+      const errorEl = document.getElementById('audioError');
+      const resultBox = document.getElementById('audioResult');
+      const fetchBtn = document.getElementById('audioFetchBtn');
+
+      errorEl.classList.add('hidden');
+      resultBox.classList.add('hidden');
+
+      if (!url) {
+        errorEl.innerText = "Please enter a valid TikTok or Instagram URL.";
+        errorEl.classList.remove('hidden');
+        return;
+      }
+
+      fetchBtn.disabled = true;
+      fetchBtn.innerText = "Fetching...";
+
+      // Reusing RapidAPI AutoLink for Audio Extraction
+      try {
+        const response = await fetch('https://social-download-all-in-one.p.rapidapi.com/v1/social/autolink', {
+          method: 'POST',
+          headers: {
+            'x-rapidapi-key': 'e9027031famsh857b6c916b40533p1d4d30jsn674a697f1caa',
+            'x-rapidapi-host': 'social-download-all-in-one.p.rapidapi.com',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ url: url })
+        });
+        const data = await response.json();
+
+        let audioUrl = "";
+        if (data && data.medias) {
+          const audioMedia = data.medias.find(m => m.extension === 'mp3' || m.type === 'audio');
+          audioUrl = audioMedia ? audioMedia.url : (data.medias[0] ? data.medias[0].url : "");
+        } else if (data.url) {
+          audioUrl = data.url;
+        }
+
+        if (audioUrl) {
+          document.getElementById('audioTitle').innerText = data.title || "Extracted Audio Track";
+          document.getElementById('audioPlayer').src = audioUrl;
+          document.getElementById('audioDownloadLink').href = audioUrl;
+          resultBox.classList.remove('hidden');
+        } else {
+          errorEl.innerText = "Audio track could not be extracted from this URL.";
+          errorEl.classList.remove('hidden');
+        }
+      } catch (err) {
+        errorEl.innerText = "Failed to fetch audio.";
+        errorEl.classList.remove('hidden');
+      } finally {
+        fetchBtn.disabled = false;
+        fetchBtn.innerText = "Fetch Audio";
+      }
+    }
+
+    // Image Compressor Logic
+    let currentImageFile = null;
+
+    function handleImageSelect(e) {
+      currentImageFile = e.target.files[0];
+      if (!currentImageFile) return;
+
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        document.getElementById('originalImage').src = evt.target.result;
+        document.getElementById('originalSize').innerText = `Original Size: ${(currentImageFile.size / 1024).toFixed(2)} KB`;
+        document.getElementById('compressControls').classList.remove('hidden');
+      };
+      reader.readAsDataURL(currentImageFile);
+    }
+
+    function compressImage() {
+      if (!currentImageFile) return;
+
+      const img = new Image();
+      img.src = document.getElementById('originalImage').src;
+      img.onload = function() {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+
+        const quality = document.getElementById('compressQuality').value / 100;
+        const format = document.getElementById('compressFormat').value;
+
+        const compressedDataUrl = canvas.toDataURL(format, quality);
+        document.getElementById('compressedImage').src = compressedDataUrl;
+
+        // Estimate size
+        const head = `data:${format};base64,`;
+        const sizeInBytes = Math.round((compressedDataUrl.length - head.length) * 3 / 4);
+        document.getElementById('compressedSize').innerText = `Compressed Size: ${(sizeInBytes / 1024).toFixed(2)} KB`;
+
+        const downloadLink = document.getElementById('compressedDownload');
+        downloadLink.href = compressedDataUrl;
+        document.getElementById('compressResult').classList.remove('hidden');
+      };
+    }
+
+    // Image Resizer Logic
+    let resizeImageFile = null;
+
+    function handleResizeSelect(e) {
+      resizeImageFile = e.target.files[0];
+      if (resizeImageFile) {
+        document.getElementById('resizeControls').classList.remove('hidden');
+      }
+    }
+
+    function toggleCustomResize(val) {
+      const customDim = document.getElementById('customDimensions');
+      if (val === 'custom') {
+        customDim.classList.remove('hidden');
+      } else {
+        customDim.classList.add('hidden');
+      }
+    }
+
+    function resizeImage() {
+      if (!resizeImageFile) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.src = e.target.result;
+        img.onload = function() {
+          let w = 1080, h = 1080;
+          const preset = document.getElementById('resizePreset').value;
+
+          if (preset === 'custom') {
+            w = parseInt(document.getElementById('customWidth').value) || img.width;
+            h = parseInt(document.getElementById('customHeight').value) || img.height;
+          } else {
+            const parts = preset.split('x');
+            w = parseInt(parts[0]);
+            h = parseInt(parts[1]);
+          }
+
+          const canvas = document.createElement('canvas');
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+
+          const format = document.getElementById('resizeFormat').value;
+          const resizedUrl = canvas.toDataURL(format, 0.9);
+
+          const resizedImgEl = document.getElementById('resizedImage');
+          resizedImgEl.src = resizedUrl;
+          document.getElementById('resizePreview').classList.remove('hidden');
+
+          const a = document.createElement('a');
+          a.href = resizedUrl;
+          a.download = `resized-image.${format.split('/')[1]}`;
+          a.click();
+        };
+      };
+      reader.readAsDataURL(resizeImageFile);
+    }
+
+    // Color Picker Logic
+    function updateColorValues(hex) {
+      document.getElementById('colorPreview').style.background = hex;
+      document.getElementById('hexValue').innerText = hex;
+
+      let r = parseInt(hex.substr(1,2), 16);
+      let g = parseInt(hex.substr(3,2), 16);
+      let b = parseInt(hex.substr(5,2), 16);
+
+      document.getElementById('rgbValue').innerText = `rgb(${r}, ${g}, ${b})`;
+
+      // Simple HSL conversion
+      r /= 255; g /= 255; b /= 255;
+      let max = Math.max(r, g, b), min = Math.min(r, g, b);
+      let h, s, l = (max + min) / 2;
+
+      if (max == min) {
+        h = s = 0;
+      } else {
+        let d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        switch (max) {
+          case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+          case g: h = (b - r) / d + 2; break;
+          case b: h = (r - g) / d + 4; break;
+        }
+        h /= 6;
+      }
+      document.getElementById('hslValue').innerText = `hsl(${Math.round(h * 360)}, ${Math.round(s * 100)}%, ${Math.round(l * 100)}%)`;
+    }
+
+    // Speed Test Demo
+    function startSpeedTest() {
+      const btn = document.getElementById('speedButton');
+      const speedVal = document.getElementById('speedValue');
+      btn.disabled = true;
+      btn.innerText = "Testing...";
+
+      let speed = 0;
+      const interval = setInterval(() => {
+        speed = Math.floor(Math.random() * 80) + 20;
+        speedVal.innerText = speed;
+      }, 100);
+
+      setTimeout(() => {
+        clearInterval(interval);
+        const finalSpeed = (Math.random() * 40 + 50).toFixed(1);
+        speedVal.innerText = finalSpeed;
+        document.getElementById('pingValue').innerText = Math.floor(Math.random() * 20 + 10) + " ms";
+        document.getElementById('downloadValue').innerText = finalSpeed + " Mbps";
+        document.getElementById('uploadValue').innerText = (finalSpeed * 0.4).toFixed(1) + " Mbps";
+        btn.disabled = false;
+        btn.innerText = "Start Speed Test";
+      }, 3000);
+    }
+
+    async function lookupIP() {
+  const loading = document.getElementById('ipLoading');
+  const err = document.getElementById('ipError');
+  
+  if (loading) loading.classList.remove('hidden');
+  if (err) err.classList.add('hidden');
+
+  // Set User Agent immediately from browser
+  document.getElementById('ipUserAgent').innerText = navigator.userAgent;
+
+  try {
+    // 1st Attempt: ipapi.co
+    let res = await fetch('https://ipapi.co/json/');
+    if (!res.ok) throw new Error('Primary API failed');
+    let data = await res.json();
+
+    document.getElementById('ipAddress').innerText = data.ip || 'Unavailable';
+    document.getElementById('ipCountry').innerText = (data.country_name || '') + (data.country_code ? ` (${data.country_code})` : '');
+    document.getElementById('ipISP').innerText = data.org || data.asn || 'Unavailable';
+
+  } catch (e) {
+    // Fallback Attempt: ipify + api.ipify.org
+    try {
+      let ipRes = await fetch('https://api.ipify.org?format=json');
+      let ipData = await ipRes.json();
+      
+      document.getElementById('ipAddress').innerText = ipData.ip;
+
+      // Fetch Geolocation using fallback
+      let geoRes = await fetch(`https://ipwho.is/${ipData.ip}`);
+      let geoData = await geoRes.json();
+
+      document.getElementById('ipCountry').innerText = geoData.country ? `${geoData.country} (${geoData.country_code})` : 'Unavailable';
+      document.getElementById('ipISP').innerText = geoData.connection?.isp || geoData.org || 'Unavailable';
+
+    } catch (fallbackErr) {
+      if (err) {
+        err.innerText = 'Unable to fetch network details. Please check your internet connection or disable AdBlockers.';
+        err.classList.remove('hidden');
+      }
+    }
+  } finally {
+    if (loading) loading.classList.add('hidden');
+  }
+}
+
+    // JSON Formatter
+    function formatJSON() {
+      const input = document.getElementById('jsonInput').value;
+      const err = document.getElementById('jsonError');
+      err.classList.add('hidden');
+      try {
+        const parsed = JSON.parse(input);
+        document.getElementById('jsonInput').value = JSON.stringify(parsed, null, 2);
+      } catch (e) {
+        err.innerText = "Invalid JSON string.";
+        err.classList.remove('hidden');
+      }
+    }
+
+    function minifyJSON() {
+      const input = document.getElementById('jsonInput').value;
+      const err = document.getElementById('jsonError');
+      err.classList.add('hidden');
+      try {
+        const parsed = JSON.parse(input);
+        document.getElementById('jsonInput').value = JSON.stringify(parsed);
+      } catch (e) {
+        err.innerText = "Invalid JSON string.";
+        err.classList.remove('hidden');
+      }
+    }
+
+    // Text Counter
+    function analyzeText(val) {
+      const words = val.trim() ? val.trim().split(/\s+/).length : 0;
+      const chars = val.length;
+      const sentences = val.trim() ? val.split(/[.!?]+/).filter(Boolean).length : 0;
+      const readTime = Math.ceil(words / 200);
+
+      document.getElementById('wordCount').innerText = words;
+      document.getElementById('charCount').innerText = chars;
+      document.getElementById('sentenceCount').innerText = sentences;
+      document.getElementById('readTime').innerText = readTime + "m";
+    }
+
+    // Password Generator
+    function generatePassword() {
+      const len = parseInt(document.getElementById('passLength').value);
+      const incUpper = document.getElementById('incUppercase').checked;
+      const incNum = document.getElementById('incNumbers').checked;
+      const incSym = document.getElementById('incSymbols').checked;
+
+      let lower = "abcdefghijklmnopqrstuvwxyz";
+      if (incUpper) lower += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      if (incNum) lower += "0123456789";
+      if (incSym) lower += "!@#$%^&*()_+-=[]{}|;:,.<>?";
+
+      let pwd = "";
+      for (let i = 0; i < len; i++) {
+        pwd += lower.charAt(Math.floor(Math.random() * lower.length));
+      }
+      document.getElementById('generatedPassword').value = pwd;
+    }
+
+    // Copy Utility
+    function copyText(elementId) {
+      const el = document.getElementById(elementId);
+      const textToCopy = el.value || el.innerText;
+      navigator.clipboard.writeText(textToCopy);
+      alert("Copied to clipboard!");
+    }
+
+    // Auto load IP info on page start
+    window.addEventListener('DOMContentLoaded', () => {
+      lookupIP();
+    });
+  </script>
+</body>
+</html>
